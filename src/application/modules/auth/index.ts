@@ -1,0 +1,1 @@
+export { JwtPayloadInfo } from './type';
