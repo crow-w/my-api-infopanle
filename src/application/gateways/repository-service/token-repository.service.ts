@@ -13,9 +13,8 @@ export class AccessTokenRepositoryService implements AccessTokenRepository {
   ) {
     this._expireIn = 1209600; // ２週間
   }
-
-  async save(userCd: string, token: string): Promise<void> {
-    await this._redisHandler.set(userCd, token, this._expireIn).catch((e) => {
+  async save(openid: string, token: string): Promise<void> {
+    await this._redisHandler.set(openid, token, this._expireIn).catch((e) => {
       throw new Error(e);
     });
     return;

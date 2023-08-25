@@ -39,7 +39,7 @@ export class HttpExceptionsFilter implements ExceptionFilter {
     if (httpStatus >= serverErr) {
       responseBody = {
         statusCode: serverErr,
-        message: `システム管理者にお問い合わせください。 問い合わせNo: ${uuid}`,
+        message: `服务器问题,请联系管理员: ${uuid}`,
         error: 'Internal Server Error',
       };
       this.logger.errorWithUuid(uuid, err);

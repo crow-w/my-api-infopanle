@@ -34,7 +34,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   public async validate(payload: JwtPayloadInfo): Promise<JwtPayloadInfo> {
-    const token = await this._accessTokenRepository.get(payload.email);
+    const token = await this._accessTokenRepository.get(payload.openid);
     this._loggerService.debug(token);
     if (!token) {
       throw new UnauthorizedException(`have'n been authorized`);
@@ -69,13 +69,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException('not exist uuid field');
     }
 
-    if (typeof payload['email'] === 'undefined') {
-      throw new UnauthorizedException('not exist email field');
+    if (typeof payload['openid'] === 'undefined') {
+      throw new UnauthorizedException('not exist openid field');
     }
 
     return {
       uuid: payload['uuid'],
-      email: payload['email'],
+      openid: payload['openid'],
       iat: payload['iat'],
       exp: payload['exp'],
     };

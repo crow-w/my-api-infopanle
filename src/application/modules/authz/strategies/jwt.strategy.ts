@@ -22,7 +22,6 @@ export class AuthzJwtStrategy extends PassportStrategy(Strategy) {
   }
 
   validate(payload: unknown): unknown {
-    console.log(payload);
     return payload;
   }
 }

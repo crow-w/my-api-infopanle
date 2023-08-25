@@ -29,8 +29,6 @@ export class LoginRepositoryService implements LoginRepository {
       .catch((err) => {
         throw err;
       });
-    console.log('loginData');
-    console.log(loginData.data);
     const userData = jwt_decode(loginData.data['id_token']);
 
     // TODO:この辺の情報を必要に応じて変更

@@ -73,7 +73,6 @@ export class HttpXService implements HttpHandler {
     } catch (err) {
       if (axios.isAxiosError(err)) {
         // TODO カスタムエラーを作成して返却
-        console.log(err);
         return Promise.reject(new Error('axios error'));
       }
       return Promise.reject(new Error('不明エラー'));
