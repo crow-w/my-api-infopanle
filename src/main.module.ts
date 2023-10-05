@@ -21,7 +21,7 @@ const modules = Object.values(Modules);
         port: configService.get<number>('GATE_PORT') || 3306,
         username: configService.get<string>('GATE_USER') || 'root',
         password: configService.get<string>('GATE_PASS') || 'root',
-        database: configService.get<string>('GATE_SCHEMA') || 't est',
+        database: configService.get<string>('GATE_SCHEMA') || 'test',
         entities: [
           __dirname + '/application/gateways/repository-service/entities/*.js',
         ],
