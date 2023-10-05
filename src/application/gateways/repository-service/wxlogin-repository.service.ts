@@ -52,6 +52,7 @@ export class WxloginRepositoryService implements WxloginRepository {
 
     return new WxloginEntity({
       id: user.id,
+      session_key: user.session_key,
       openid: user.openid,
     });
   }

@@ -37,7 +37,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const token = await this._accessTokenRepository.get(payload.openid);
     this._loggerService.debug(token);
     if (!token) {
-      throw new UnauthorizedException(`have'n been authorized`);
+      throw new UnauthorizedException(`未授权或授权失效，请重新登陆！`);
     }
 
     // キャッシュに登録されているtokenとの整合性を確認
@@ -48,9 +48,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new InternalServerErrorException();
     });
 
-    if (cashedTokenPayload.uuid !== payload.uuid) {
+    if (cashedTokenPayload.session_key !== payload.session_key) {
       this._loggerService.debug(
-        `cash token uuid is ${cashedTokenPayload.uuid}, incoming token uuid is ${payload.uuid}`,
+        `cash token uuid is ${cashedTokenPayload.session_key}, incoming token uuid is ${payload.session_key}`,
       );
       throw new UnauthorizedException('invalid token is incoming');
     }
@@ -61,20 +61,17 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   private async decodeJwt(token: string): Promise<JwtPayloadInfo> {
     const payload = this._jwtService.decode(token);
 
+    console.log('payload', payload);
     if (!payload) {
       throw new UnauthorizedException('cannot decode cash-token');
-    }
-
-    if (typeof payload['uuid'] === 'undefined') {
-      throw new UnauthorizedException('not exist uuid field');
     }
 
     if (typeof payload['openid'] === 'undefined') {
       throw new UnauthorizedException('not exist openid field');
     }
-
+    console.log('payload', payload);
     return {
-      uuid: payload['uuid'],
+      session_key: payload['session_key'],
       openid: payload['openid'],
       iat: payload['iat'],
       exp: payload['exp'],

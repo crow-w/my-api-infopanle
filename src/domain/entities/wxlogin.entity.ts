@@ -1,21 +1,22 @@
-import { UuidService } from 'src/util/uuid';
-
 export type JwtPayload = {
-  uuid: string;
+  session_key: string;
   openid: string;
 };
 
 type LoginEntityProps = {
   id: string;
   openid: string;
+  session_key: string;
 };
 
 export class WxloginEntity {
   private readonly _id: string;
+  private readonly _sessionKey: string;
   private readonly _openid: string;
 
   constructor(props: LoginEntityProps) {
     this._id = props.id;
+    this._sessionKey = props.session_key;
     this._openid = props.openid;
   }
 
@@ -29,7 +30,7 @@ export class WxloginEntity {
 
   public getJwtPayload(): JwtPayload {
     return {
-      uuid: UuidService.getUuid(),
+      session_key: this._sessionKey,
       openid: this._openid,
     };
   }
