@@ -72,4 +72,15 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 Nest is [MIT licensed](LICENSE).
 
-## 环境配置需要copy .env.example 到 development.env 或者置空 production 也一样
+## 个人备注（忽略）
+环境配置需要copy .env.example 到 development.env 或者置空 production 也一样
+### 开发新接口时
+进入module目录生成 module controller service
+
+`` nest g mo example  ``
+
+`` nest g co example  ``
+
+`` nest g s example  ``
+
+然后就根据以前的接口弄就可以了
