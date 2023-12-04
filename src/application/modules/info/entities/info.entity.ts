@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 type InfoEntityProps = {
   id: string;
+  uId: string;
   content: string;
   imgs: string;
   tel: string;
@@ -19,6 +20,12 @@ export class InfoEntity {
     description: '信息id',
   })
   id: string;
+
+  @ApiProperty({
+    example: 1,
+    description: '用户id',
+  })
+  uId: string;
 
   @ApiProperty({
     example: '收购二手小汽车',
@@ -76,6 +83,7 @@ export class InfoEntity {
 
   constructor(props: InfoEntityProps) {
     this.id = props.id;
+    this.uId = props.uId;
     this.content = props.content;
     this.imgs = props.imgs;
     this.tel = props.tel;

@@ -7,10 +7,12 @@ import {
   ApiUnauthorizedResponse,
   ApiConflictResponse,
   ApiInternalServerErrorResponse,
+  ApiOperation,
 } from '@nestjs/swagger';
 
-export function PostApiResponse<T = any>(type: Type<T>) {
+export function PostApiResponse<T = any>(type: Type<T>, summary: string) {
   return applyDecorators(
+    ApiOperation({ summary: summary }),
     ApiOkResponse({
       description: 'SUCCESS',
       type: type,

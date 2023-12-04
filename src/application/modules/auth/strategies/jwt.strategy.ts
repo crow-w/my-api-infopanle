@@ -73,6 +73,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     return {
       session_key: payload['session_key'],
       openid: payload['openid'],
+      id: payload['id'],
       iat: payload['iat'],
       exp: payload['exp'],
     };

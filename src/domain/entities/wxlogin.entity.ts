@@ -1,6 +1,7 @@
 export type JwtPayload = {
   session_key: string;
   openid: string;
+  id: string;
 };
 
 type LoginEntityProps = {
@@ -32,6 +33,7 @@ export class WxloginEntity {
     return {
       session_key: this._sessionKey,
       openid: this._openid,
+      id: this._id,
     };
   }
 }
