@@ -6,6 +6,8 @@ import {
 } from 'src/domain/repository/info-repository.interface';
 import { InfoResultEntity } from './entities/info-no.entity';
 import { CreateInfoDto } from './dto/create-info.dto';
+import { DeleteInfoDto } from './dto/delete-info.dto';
+import { UpdateInfoDto } from './dto/update-info.dto';
 
 @Injectable()
 export class InfoService {
@@ -51,6 +53,27 @@ export class InfoService {
         throw err;
       });
     console.log('res', res);
+    return {
+      infoNo: res.infoNo,
+      infoStatus: res.infoStatus,
+    };
+  }
+
+  async handleDelete(req: DeleteInfoDto): Promise<InfoResultEntity> {
+    const res = await this._infoRepository.handleDelete(req).catch((err) => {
+      throw err;
+    });
+    console.log('delete res', res);
+    return {
+      infoNo: res.infoNo,
+      infoStatus: res.infoStatus,
+    };
+  }
+
+  async handleUpdate(req: UpdateInfoDto): Promise<InfoResultEntity> {
+    const res = await this._infoRepository.handleUpdate(req).catch((err) => {
+      throw err;
+    });
     return {
       infoNo: res.infoNo,
       infoStatus: res.infoStatus,

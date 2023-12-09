@@ -1,7 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsInt, IsString } from 'class-validator';
 
-export class CreateInfoDto {
+export class UpdateInfoDto {
+  @ApiProperty({
+    required: true,
+    description: '信息id',
+    example: '5a7258e5-6178-4075-a843-895de364d709',
+  })
+  @IsString()
+  readonly id: string;
+
   @ApiProperty({ description: '信息内容', example: '车找人 赛罕到二连' })
   @IsString()
   readonly content: string;
