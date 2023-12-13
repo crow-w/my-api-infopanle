@@ -66,9 +66,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException('cannot decode cash-token');
     }
 
-    if (typeof payload['openid'] === 'undefined') {
-      throw new UnauthorizedException('not exist openid field');
-    }
+    // if (typeof payload['openid'] === 'undefined') {
+    //   throw new UnauthorizedException('not exist openid field');
+    // }
     console.log('payload', payload);
     return {
       session_key: payload['session_key'],

@@ -17,6 +17,8 @@ import { REDIS_HANDLER } from 'src/application/gateways/dbhander';
 import { LoginRepositoryService } from 'src/application/gateways/repository-service/login-repository.service';
 import { LOGIN_REPOSITORY } from 'src/domain/repository/login-repository.interface';
 import { PassportModule } from '@nestjs/passport';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from 'src/application/gateways/repository-service/entities';
 
 @Module({
   controllers: [LoginController],
@@ -42,6 +44,7 @@ import { PassportModule } from '@nestjs/passport';
     },
   ],
   imports: [
+    TypeOrmModule.forFeature([User]),
     HttpXModule,
     HttpModule,
     DbClientModule,

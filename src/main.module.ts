@@ -25,25 +25,7 @@ const modules = Object.values(Modules);
         entities: [
           __dirname + '/application/gateways/repository-service/entities/*.js',
         ],
-        synchronize: true,
-        logging: configService.get('DB_LOG_LEVEL') === 'debug' ? true : false,
-      }),
-      inject: [ConfigService],
-    }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        name: 'readCommit',
-        type: 'mysql',
-        host: configService.get<string>('GATE_HOST') || '127.0.0.1',
-        port: configService.get<number>('GATE_PORT') || 3306,
-        username: configService.get<string>('GATE_USER') || 'root',
-        password: configService.get<string>('GATE_PASS') || '123456',
-        database: configService.get<string>('GATE_SCHEMA') || 'test',
-        entities: [
-          __dirname + '/application/gateways/repository-service/entities/*.js',
-        ],
-        synchronize: true,
+        synchronize: false,
         logging: configService.get('DB_LOG_LEVEL') === 'debug' ? true : false,
       }),
       inject: [ConfigService],

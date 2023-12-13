@@ -1,46 +1,52 @@
-import { UuidService } from 'src/util/uuid';
-
 export type JwtPayload = {
-  uuid: string;
   email: string;
+  password: string;
+  username: string;
+  id: string;
 };
 
 type LoginEntityProps = {
-  access_token: string;
-  id_token: string;
-  name: string;
   email: string;
+  password: string;
+  username: string;
+  id: string;
 };
 
 export class LoginEntity {
-  private readonly _accessToken: string;
-  private readonly _idToken: string;
-  private readonly _name: string;
   private readonly _email: string;
+  private readonly _password: string;
+  private readonly _username: string;
+  private readonly _id: string;
 
   constructor(props: LoginEntityProps) {
-    this._accessToken = props.access_token;
-    this._idToken = props.id_token;
-    this._name = props.name;
     this._email = props.email;
-  }
-
-  public get idToken(): string {
-    return this._idToken;
-  }
-
-  public get name(): string {
-    return this._name;
+    this._password = props.password;
+    this._username = props.username;
+    this._id = props.id;
   }
 
   public get email(): string {
     return this._email;
   }
 
+  public get password(): string {
+    return this._password;
+  }
+
+  public get username(): string {
+    return this._username;
+  }
+
+  public get id(): string {
+    return this._id;
+  }
+
   public getJwtPayload(): JwtPayload {
     return {
-      uuid: UuidService.getUuid(),
       email: this._email,
+      password: this._password,
+      username: this._username,
+      id: this._id,
     };
   }
 }

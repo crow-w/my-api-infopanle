@@ -1,1 +1,1 @@
-export { AuthEntity } from './login.entity';
+export { AuthLoginEntity } from './login.entity';

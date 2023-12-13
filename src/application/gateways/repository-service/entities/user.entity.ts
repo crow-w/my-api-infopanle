@@ -11,6 +11,22 @@ export class User {
   id: string;
 
   @Column({
+    name: 'email',
+    type: 'varchar',
+    nullable: true,
+    comment: '邮箱',
+  })
+  email: string;
+
+  @Column({
+    name: 'password',
+    type: 'varchar',
+    nullable: true,
+    comment: '密码',
+  })
+  password: string;
+
+  @Column({
     name: 'username',
     type: 'varchar',
     nullable: true,

@@ -2,7 +2,7 @@ import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { LoginService } from './login.service';
 import { LoginDto } from './dto';
-import { AuthEntity } from './entities';
+import { AuthLoginEntity } from './entities';
 import { PostGetApiResponse } from 'src/util/decorators';
 
 @ApiTags('ログイン')
@@ -13,11 +13,9 @@ export class LoginController {
   @Post()
   @HttpCode(HttpStatus.OK)
   @PostGetApiResponse()
-  async login(@Body() body: LoginDto): Promise<AuthEntity> {
-    return await this._loginService
-      .handleLogin(body.authorizationCode)
-      .catch((err) => {
-        throw err;
-      });
+  async login(@Body() body: LoginDto): Promise<AuthLoginEntity> {
+    return await this._loginService.handleLogin(body).catch((err) => {
+      throw err;
+    });
   }
 }

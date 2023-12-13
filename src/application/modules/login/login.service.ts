@@ -2,6 +2,7 @@ import {
   Injectable,
   Inject,
   InternalServerErrorException,
+  BadRequestException,
 } from '@nestjs/common';
 import {
   ACCESS_TOKEN_REPOSITORY,
@@ -11,8 +12,9 @@ import type {
   AccessTokenRepository,
   LoginRepository,
 } from 'src/domain/repository';
-import { AuthEntity } from './entities';
+import { AuthLoginEntity } from './entities';
 import { JwtService } from '@nestjs/jwt';
+import { LoginDto } from './dto';
 
 @Injectable()
 export class LoginService {
@@ -24,23 +26,20 @@ export class LoginService {
     private readonly _accessTokenRepository: AccessTokenRepository,
   ) {}
 
-  public async handleLogin(authorizationCode: string): Promise<AuthEntity> {
-    // Auth0 ログイン
-    // 访问微信接口 获取openid 和昵称(向微信接口发送appid appsecret ) 返回session_key & openid 根据openid查询数据库 是否有 无代表未注册 自动注册一个用户
-    const res = await this._loginRepository.login(authorizationCode);
-    // 生成token
-    const accessToken = this._jwtService.sign(res.getJwtPayload());
+  public async handleLogin(body: LoginDto): Promise<AuthLoginEntity> {
+    const user = await this._loginRepository.login(body);
+    const accessToken = this._jwtService.sign(user.getJwtPayload());
     if (!accessToken) {
       throw new InternalServerErrorException('accessTokenが作成出来ません。');
     }
 
     await this._accessTokenRepository
-      .save(res.email, accessToken)
+      .save(user.email, accessToken)
       .catch((err) => {
         throw new InternalServerErrorException(err);
       });
-    return new AuthEntity({
-      accessToken: accessToken,
+    return new AuthLoginEntity({
+      token: accessToken,
     });
   }
 }

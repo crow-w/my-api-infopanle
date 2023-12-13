@@ -42,14 +42,18 @@ export class WxloginRepositoryService implements WxloginRepository {
           throw err;
         });
       if (!user) {
-        user = await this._userRepository.insert({
+        await this._userRepository.insert({
           id: UuidService.getUuid(),
           openid: loginData.data.openid,
           sessionKey: loginData.data.session_key,
         });
+        user = await this._userRepository
+          .findOne({ openid: loginData.data.openid })
+          .catch((err) => {
+            throw err;
+          });
       }
     }
-
     return new WxloginEntity({
       id: user.id,
       session_key: user.session_key,

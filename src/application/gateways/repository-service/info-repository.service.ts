@@ -34,6 +34,7 @@ export class InfoRepositoryService implements InfoRepository {
           'updateTime',
         ],
         where,
+        order: { createTime: 'DESC' },
       })
       .catch((err) => {
         throw err;
@@ -63,10 +64,12 @@ export class InfoRepositoryService implements InfoRepository {
   ): Promise<InfoResultEntity> {
     const id = UuidService.getUuid();
     await getManager().transaction(async (transactionalEntityManager) => {
-      const infoObj = { id: id, uId: uuid, ...req };
-      await transactionalEntityManager.insert(Info, infoObj).catch((err) => {
-        throw new InternalServerErrorException(err);
-      });
+      const infoObj = { id: id, uId: uuid };
+      await transactionalEntityManager
+        .insert(Info, Object.assign(req, infoObj))
+        .catch((err) => {
+          throw new InternalServerErrorException(err);
+        });
     });
     return {
       infoNo: id,
@@ -91,7 +94,7 @@ export class InfoRepositoryService implements InfoRepository {
     };
   }
 
-  async handleUpdate(req: UpdateInfoDto): Promise<InfoResultEntity>{
+  async handleUpdate(req: UpdateInfoDto): Promise<InfoResultEntity> {
     await getManager().transaction(async (transactionalEntityManager) => {
       await transactionalEntityManager
         .update(Info, req.id, req)
