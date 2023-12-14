@@ -1,6 +1,8 @@
 type InfoEntityProps = {
   id: string;
   uId: string;
+  username: string;
+  avatarurl: string;
   content: string;
   imgs: string;
   tel: string;
@@ -15,6 +17,8 @@ type InfoEntityProps = {
 export class InfoEntity {
   private readonly _id: string;
   private readonly _uId: string;
+  private readonly _username: string;
+  private readonly _avatarurl: string;
   private readonly _content: string;
   private readonly _imgs: string;
   private readonly _tel: string;
@@ -28,6 +32,8 @@ export class InfoEntity {
   constructor(props: InfoEntityProps) {
     this._id = props.id;
     this._uId = props.uId;
+    this._username = props.username;
+    this._avatarurl = props.avatarurl;
     this._content = props.content;
     this._imgs = props.imgs;
     this._tel = props.tel;
@@ -45,6 +51,14 @@ export class InfoEntity {
 
   public get uId(): string {
     return this._uId;
+  }
+
+  public get username(): string {
+    return this._username;
+  }
+
+  public get avatarurl(): string {
+    return this._avatarurl;
   }
 
   public get content(): string {

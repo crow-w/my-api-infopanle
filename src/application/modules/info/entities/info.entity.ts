@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { User } from 'src/application/gateways/repository-service/entities';
 
 type InfoEntityProps = {
   id: string;
@@ -12,6 +13,8 @@ type InfoEntityProps = {
   times: number;
   createTime: Date;
   updateTime: Date;
+  username: string;
+  avatarurl: string;
 };
 
 export class InfoEntity {
@@ -22,10 +25,22 @@ export class InfoEntity {
   id: string;
 
   @ApiProperty({
-    example: 1,
-    description: '用户id',
+    example: '',
+    description: '用户Id',
   })
   uId: string;
+
+  @ApiProperty({
+    example: '',
+    description: '用户名称',
+  })
+  username: string;
+
+  @ApiProperty({
+    example: '',
+    description: '用户头像',
+  })
+  avatarurl: string;
 
   @ApiProperty({
     example: '收购二手小汽车',
@@ -84,6 +99,8 @@ export class InfoEntity {
   constructor(props: InfoEntityProps) {
     this.id = props.id;
     this.uId = props.uId;
+    this.username = props.username;
+    this.avatarurl = props.avatarurl;
     this.content = props.content;
     this.imgs = props.imgs;
     this.tel = props.tel;

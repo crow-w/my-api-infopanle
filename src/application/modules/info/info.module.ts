@@ -5,6 +5,7 @@ import { INFO_REPOSITORY } from 'src/domain/repository';
 import { InfoRepositoryService } from 'src/application/gateways/repository-service/info-repository.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Info } from 'src/application/gateways/repository-service/entities';
+import { DbClientModule } from 'src/infrastructure';
 
 @Module({
   controllers: [InfoController],
@@ -15,6 +16,6 @@ import { Info } from 'src/application/gateways/repository-service/entities';
       useClass: InfoRepositoryService,
     },
   ],
-  imports: [TypeOrmModule.forFeature([Info])],
+  imports: [DbClientModule, TypeOrmModule.forFeature([Info])],
 })
 export class InfoModule {}

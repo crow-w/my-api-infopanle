@@ -2,49 +2,69 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InfoRepository } from 'src/domain/repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Entity, Repository, TransactionManager, getManager } from 'typeorm';
-import { Info } from './entities';
+import { Info, User } from './entities';
 import { InfoEntity } from 'src/domain/entities';
 import { InfoResultEntity } from 'src/application/modules/info/entities/info-no.entity';
 import { CreateInfoDto } from 'src/application/modules/info/dto/create-info.dto';
 import { UuidService } from 'src/util/uuid';
 import { DeleteInfoDto } from 'src/application/modules/info/dto/delete-info.dto';
 import { UpdateInfoDto } from 'src/application/modules/info/dto/update-info.dto';
+import { DbClientService } from 'src/infrastructure';
 
 @Injectable()
 export class InfoRepositoryService implements InfoRepository {
   constructor(
     @InjectRepository(Info)
     private readonly _InfoReop: Repository<Info>,
-  ) {}
-  async findAll(): Promise<InfoEntity[]> {
-    const where = {};
-    const infoList = await this._InfoReop
-      .find({
-        select: [
-          'id',
-          'uId',
-          'content',
-          'imgs',
-          'tel',
-          'location',
-          'status',
-          'category',
-          'times',
-          'createTime',
-          'updateTime',
-        ],
-        where,
-        order: { createTime: 'DESC' },
-      })
-      .catch((err) => {
-        throw err;
-      });
 
-    return infoList.map(
+    private readonly _dbClient: DbClientService,
+  ) {}
+  async findAll(): Promise<any> {
+    const baseQuery = [
+      'SELECT',
+      ' inf.*',
+      ' , usr.username',
+      ' , usr.avatarurl',
+      'FROM',
+      '   info inf',
+      'LEFT JOIN',
+      '   user usr',
+      'ON',
+      '   inf.uId = usr.id',
+    ].join('\n');
+
+    const res = await this._dbClient.namedSelect(baseQuery).catch((err) => {
+      throw new InternalServerErrorException(err);
+    });
+    const where = {};
+    // const infoList = await this._InfoReop
+    //   .find({
+    //     select: [
+    //       'id',
+    //       'uId',
+    //       'content',
+    //       'imgs',
+    //       'tel',
+    //       'location',
+    //       'status',
+    //       'category',
+    //       'times',
+    //       'createTime',
+    //       'updateTime',
+    //     ],
+    //     where,
+    //     order: { createTime: 'DESC' },
+    //   })
+    //   .catch((err) => {
+    //     throw err;
+    //   });
+    return res.data.map(
       (info) =>
         new InfoEntity({
           id: info.id,
           uId: info.uId,
+          username: info.username,
+          avatarurl: info.avatarurl,
           content: info.content,
           imgs: info.imgs,
           tel: info.tel,

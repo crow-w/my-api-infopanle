@@ -26,6 +26,8 @@ export class InfoService {
         new InfoEntity({
           id: data.id,
           uId: data.uId,
+          username: data.username,
+          avatarurl: data.avatarurl,
           content: data.content,
           imgs: data.imgs,
           tel: data.tel,

@@ -3,6 +3,7 @@ import { DeleteInfoDto } from 'src/application/modules/info/dto/delete-info.dto'
 import { InfoResultEntity } from 'src/application/modules/info/entities/info-no.entity';
 import { InfoEntity } from '../entities';
 import { UpdateInfoDto } from 'src/application/modules/info/dto/update-info.dto';
+import { User } from 'src/application/gateways/repository-service/entities';
 
 export const INFO_REPOSITORY = 'info_repository';
 
@@ -16,6 +17,8 @@ export interface InfoRepository {
 export type InfoResult = {
   id: string;
   uId: string;
+  username: string;
+  avatarurl: string;
   content: string;
   imgs: string;
   tel: string;
