@@ -12,6 +12,7 @@ export interface InfoRepository {
   findAll(): Promise<InfoResult[]>;
   handleDelete(req: DeleteInfoDto): Promise<InfoResultEntity>;
   handleUpdate(req: UpdateInfoDto): Promise<InfoResultEntity>;
+  findAllUnlogin(): Promise<InfoResult[]>;
 }
 
 export type InfoResult = {

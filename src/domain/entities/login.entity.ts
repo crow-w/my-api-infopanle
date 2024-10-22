@@ -1,4 +1,4 @@
-export type JwtPayload = {
+export type JwtPayload2 = {
   email: string;
   password: string;
   username: string;
@@ -41,7 +41,7 @@ export class LoginEntity {
     return this._id;
   }
 
-  public getJwtPayload(): JwtPayload {
+  public getJwtPayload(): JwtPayload2 {
     return {
       email: this._email,
       password: this._password,

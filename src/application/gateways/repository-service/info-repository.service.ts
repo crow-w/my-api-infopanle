@@ -1,5 +1,5 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { InfoRepository } from 'src/domain/repository';
+import { InfoRepository, InfoResult } from 'src/domain/repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Entity, Repository, TransactionManager, getManager } from 'typeorm';
 import { Info, User } from './entities';
@@ -13,12 +13,49 @@ import { DbClientService } from 'src/infrastructure';
 
 @Injectable()
 export class InfoRepositoryService implements InfoRepository {
-  constructor(
-    @InjectRepository(Info)
-    private readonly _InfoReop: Repository<Info>,
+  constructor(private readonly _dbClient: DbClientService) {}
 
-    private readonly _dbClient: DbClientService,
-  ) {}
+  async findAllUnlogin(): Promise<InfoResult[]> {
+    console.log('here!');
+    const baseQuery = [
+      'SELECT',
+      ' inf.*',
+      ' , usr.username',
+      ' , usr.avatarurl',
+      'FROM',
+      '   info inf',
+      'LEFT JOIN',
+      '   user usr',
+      'ON',
+      '   inf.uId = usr.id',
+      'WHERE',
+      '    inf.status > 1',
+      'ORDER BY',
+      '    inf.create_time desc',
+    ].join('\n');
+    const res = await this._dbClient.namedSelect(baseQuery).catch((err) => {
+      throw new InternalServerErrorException(err);
+    });
+
+    return res.data.map(
+      (info) =>
+        new InfoEntity({
+          id: info.id,
+          uId: info.uId,
+          username: info.username,
+          avatarurl: info.avatarurl,
+          content: info.content,
+          imgs: info.imgs,
+          tel: info.tel,
+          location: info.location,
+          status: info.status,
+          category: info.category,
+          times: info.times,
+          createTime: info.create_time,
+          updateTime: info.update_time,
+        }),
+    );
+  }
   async findAll(): Promise<any> {
     const baseQuery = [
       'SELECT',
@@ -31,6 +68,10 @@ export class InfoRepositoryService implements InfoRepository {
       '   user usr',
       'ON',
       '   inf.uId = usr.id',
+      'ORDER BY',
+      '    inf.create_time desc',
+      // 'WHERE',
+      // '    inf.status > 1',
     ].join('\n');
 
     const res = await this._dbClient.namedSelect(baseQuery).catch((err) => {
@@ -58,6 +99,7 @@ export class InfoRepositoryService implements InfoRepository {
     //   .catch((err) => {
     //     throw err;
     //   });
+    console.log('res', res);
     return res.data.map(
       (info) =>
         new InfoEntity({
@@ -72,8 +114,8 @@ export class InfoRepositoryService implements InfoRepository {
           status: info.status,
           category: info.category,
           times: info.times,
-          createTime: info.createTime,
-          updateTime: info.updateTime,
+          createTime: info.create_time,
+          updateTime: info.update_time,
         }),
     );
   }
@@ -116,6 +158,7 @@ export class InfoRepositoryService implements InfoRepository {
 
   async handleUpdate(req: UpdateInfoDto): Promise<InfoResultEntity> {
     await getManager().transaction(async (transactionalEntityManager) => {
+      console.log('here an errr', Info, req.id, req);
       await transactionalEntityManager
         .update(Info, req.id, req)
         .catch((err) => {

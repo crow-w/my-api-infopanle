@@ -28,6 +28,7 @@ export class LoginService {
 
   public async handleLogin(body: LoginDto): Promise<AuthLoginEntity> {
     const user = await this._loginRepository.login(body);
+    console.log('jwtpayload', user.getJwtPayload());
     const accessToken = this._jwtService.sign(user.getJwtPayload());
     if (!accessToken) {
       throw new InternalServerErrorException('accessTokenが作成出来ません。');

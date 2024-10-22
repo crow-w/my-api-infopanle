@@ -1,9 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from 'src/application/gateways/repository-service/entities';
 
 type InfoEntityProps = {
   id: string;
   uId: string;
+  username: string;
+  avatarurl: string;
   content: string;
   imgs: string;
   tel: string;
@@ -13,8 +14,6 @@ type InfoEntityProps = {
   times: number;
   createTime: Date;
   updateTime: Date;
-  username: string;
-  avatarurl: string;
 };
 
 export class InfoEntity {

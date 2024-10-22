@@ -34,8 +34,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   public async validate(payload: JwtPayloadInfo): Promise<JwtPayloadInfo> {
-    const token = await this._accessTokenRepository.get(payload.openid);
+    const token = await this._accessTokenRepository.get(
+      payload.openid || payload.email,
+    );
     this._loggerService.debug(token);
+    console.log('toekn', token);
     if (!token) {
       throw new UnauthorizedException(`未授权或授权失效，请重新登陆！`);
     }
@@ -76,6 +79,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       id: payload['id'],
       iat: payload['iat'],
       exp: payload['exp'],
+      email: payload['emial'],
+      password: payload['password'],
+      username: payload['username'],
     };
   }
 }

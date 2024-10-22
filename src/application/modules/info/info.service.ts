@@ -20,7 +20,6 @@ export class InfoService {
     const res = await this._infoRepository.findAll().catch((err) => {
       throw err;
     });
-
     const infoList = res.map(
       (data) =>
         new InfoEntity({
