@@ -4,6 +4,7 @@ import { LoginService } from './login.service';
 import { LoginDto } from './dto';
 import { AuthLoginEntity } from './entities';
 import { PostGetApiResponse } from 'src/util/decorators';
+import { RefreshTokenDto } from '../auth-refresh/dto/refresh-token.dto';
 
 @ApiTags('ログイン')
 @Controller('login')
@@ -17,5 +18,16 @@ export class LoginController {
     return await this._loginService.handleLogin(body).catch((err) => {
       throw err;
     });
+  }
+
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  @PostGetApiResponse()
+  async refreshToken(@Body() body: RefreshTokenDto) {
+    return await this._loginService
+      .refreshToken(body.refreshToken)
+      .catch((err) => {
+        throw err;
+      });
   }
 }

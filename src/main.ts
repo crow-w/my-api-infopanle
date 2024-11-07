@@ -8,7 +8,7 @@ import { HttpExceptionsFilter } from './infrastructure/middleware/filter';
 import { LoggingInterceptor } from './infrastructure/middleware/interceptor';
 import { validationPipe } from './infrastructure/middleware/pipe';
 import { MainModule } from './main.module';
-
+import fastifyMultipart from 'fastify-multipart';
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     MainModule,
@@ -31,6 +31,12 @@ async function bootstrap() {
   });
   app.setGlobalPrefix('v1');
 
+  app.register(fastifyMultipart);
+  // // 配置静态文件服务
+  // app.register(fastifyStatic, {
+  //   root: join(__dirname, '..', 'uploads'),
+  //   prefix: '/uploads/', // 访问静态文件的 URL 前缀
+  // });
   const port = Number(process.env.LISTEN_PORT) || 3000;
   const apiHost = process.env.Host || `localhost:${port}`;
   const config = new DocumentBuilder()

@@ -3,3 +3,8 @@ export { HealthModule } from './health/health.module';
 export { WxloginModule } from './wxlogin/wxlogin.module';
 export { InfoModule } from './info/info.module';
 export { InfoUnloginModule } from './info/unlogin/info-unlogin.module';
+export { CategoryModule } from './categories/category.module';
+export { FetchHomeModule } from './fetch-home/fetch-home.module';
+export { BannerModule } from './banner/banner.module';
+export { UserModule } from './user/user.module';
+export { UploadModule } from './upload/upload.module';

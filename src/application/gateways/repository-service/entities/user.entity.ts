@@ -11,10 +11,27 @@ export class User {
   id: string;
 
   @Column({
+    name: 'roles',
+    type: 'json',
+    nullable: true,
+    comment: '用户角色',
+  })
+  roles: JSON;
+
+  @Column({
+    name: 'buttons',
+    type: 'json',
+    nullable: true,
+    comment: '权限按钮',
+  })
+  buttons: JSON;
+
+  @Column({
     name: 'email',
     type: 'varchar',
     nullable: true,
     comment: '邮箱',
+    default: 'email',
   })
   email: string;
 
@@ -23,6 +40,7 @@ export class User {
     type: 'varchar',
     nullable: true,
     comment: '密码',
+    default: 'password',
   })
   password: string;
 

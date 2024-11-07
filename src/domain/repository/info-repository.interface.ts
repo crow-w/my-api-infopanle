@@ -12,7 +12,11 @@ export interface InfoRepository {
   findAll(): Promise<InfoResult[]>;
   handleDelete(req: DeleteInfoDto): Promise<InfoResultEntity>;
   handleUpdate(req: UpdateInfoDto): Promise<InfoResultEntity>;
-  findAllUnlogin(): Promise<InfoResult[]>;
+  findAllUnlogin(
+    page: number,
+    limit: number,
+    category?: number,
+  ): Promise<InfoResult[]>;
 }
 
 export type InfoResult = {
@@ -25,7 +29,7 @@ export type InfoResult = {
   tel: string;
   location: string;
   status: number;
-  category: string;
+  category: number;
   times: number;
   createTime: Date;
   updateTime: Date;

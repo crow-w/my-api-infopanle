@@ -64,12 +64,12 @@ export class Info {
     nullable: true,
     comment: '分类',
   })
-  category: string;
+  category: number;
 
   @Column({
     name: 'times',
     type: 'int',
-    nullable: true,
+    default: 0,
     comment: '查看次数',
   })
   times: number;

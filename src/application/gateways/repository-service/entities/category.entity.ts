@@ -1,6 +1,13 @@
-import { Column, CreateDateColumn, Entity, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  ManyToOne,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
-@Entity('category')
+@Entity('categories')
 export class Category {
   @Column({
     primary: true,
@@ -10,49 +17,34 @@ export class Category {
   })
   id: string;
 
-  @Column({
-    name: 'code',
-    type: 'varchar',
-    nullable: true,
-    comment: '分类编码',
-  })
-  code: string;
-
-  @Column({
-    name: 'name',
-    type: 'varchar',
-    nullable: true,
-    comment: '分类名称',
-  })
+  @Column({ type: 'varchar', length: 255 })
   name: string;
 
-  @Column({
-    name: 'level',
-    type: 'tinyint',
+  @ManyToOne(() => Category, (category) => category.children, {
     nullable: true,
-    comment: '层级',
   })
-  level: number;
+  parent: Category;
+
+  @OneToMany(() => Category, (category) => category.parent)
+  children: Category[];
+
+  @Column({ type: 'text', nullable: true })
+  description: string;
 
   @Column({
     name: 'status',
     type: 'tinyint',
     nullable: true,
-    comment: '状态',
+    comment: '分类状态',
   })
   status: number;
 
-  @CreateDateColumn({
-    name: 'create_time',
-    type: 'datetime',
-    comment: '创建时间',
-  })
-  createTime: Date;
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
 
-  @UpdateDateColumn({
-    name: 'update_time',
-    type: 'datetime',
-    comment: '更新时间',
-  })
-  updateTime: Date;
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedAt: Date;
+
+  @Column({ type: 'int', nullable: false })
+  identifier: number; // 新的四位数标识字段
 }

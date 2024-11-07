@@ -25,7 +25,7 @@ const modules = Object.values(Modules);
         entities: [
           __dirname + '/application/gateways/repository-service/entities/*.js',
         ],
-        synchronize: false,
+        synchronize: true,
         logging: configService.get('DB_LOG_LEVEL') === 'debug' ? true : false,
       }),
       inject: [ConfigService],

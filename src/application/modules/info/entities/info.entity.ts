@@ -10,7 +10,7 @@ type InfoEntityProps = {
   tel: string;
   location: string;
   status: number;
-  category: string;
+  category: number;
   times: number;
   createTime: Date;
   updateTime: Date;
@@ -72,10 +72,10 @@ export class InfoEntity {
   status: number;
 
   @ApiProperty({
-    example: '出租出售',
+    example: '11',
     description: '分类',
   })
-  category: string;
+  category: number;
 
   @ApiProperty({
     example: 10,

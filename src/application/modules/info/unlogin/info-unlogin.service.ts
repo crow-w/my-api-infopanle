@@ -4,7 +4,6 @@ import {
   INFO_REPOSITORY,
   InfoRepository,
 } from 'src/domain/repository/info-repository.interface';
-
 @Injectable()
 export class InfoUnloginService {
   constructor(
@@ -12,10 +11,16 @@ export class InfoUnloginService {
     private readonly _infoRepository: InfoRepository,
   ) {}
 
-  async findAll(): Promise<InfoEntities> {
-    const res = await this._infoRepository.findAllUnlogin().catch((err) => {
-      throw err;
-    });
+  async findAll(
+    page: number,
+    limit: number,
+    category?: number,
+  ): Promise<InfoEntities> {
+    const res = await this._infoRepository
+      .findAllUnlogin(page, limit, category)
+      .catch((err) => {
+        throw err;
+      });
     const infoList = res.map(
       (data) =>
         new InfoEntity({

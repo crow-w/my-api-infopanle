@@ -83,4 +83,9 @@ Nest is [MIT licensed](LICENSE).
 
 `` nest g s example  ``
 
+nest g res upload
+
+cd /src/application/modules
+nest g resource banner --no-spec
+
 然后就根据以前的接口弄就可以了

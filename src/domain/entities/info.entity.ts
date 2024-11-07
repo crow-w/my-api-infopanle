@@ -8,7 +8,7 @@ type InfoEntityProps = {
   tel: string;
   location: string;
   status: number;
-  category: string;
+  category: number;
   times: number;
   createTime: Date;
   updateTime: Date;
@@ -24,7 +24,7 @@ export class InfoEntity {
   private readonly _tel: string;
   private readonly _location: string;
   private readonly _status: number;
-  private readonly _category: string;
+  private readonly _category: number;
   private readonly _times: number;
   private readonly _createTime: Date;
   private readonly _updateTime: Date;
@@ -81,7 +81,7 @@ export class InfoEntity {
     return this._status;
   }
 
-  public get category(): string {
+  public get category(): number {
     return this._category;
   }
 

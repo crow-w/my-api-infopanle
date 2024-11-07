@@ -19,12 +19,15 @@ import { LOGIN_REPOSITORY } from 'src/domain/repository/login-repository.interfa
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/application/gateways/repository-service/entities';
+import { AuthRefreshService } from '../auth-refresh/auth-refresh.service';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   controllers: [LoginController],
   providers: [
     LoginService,
     JwtStrategy,
+    AuthRefreshService,
     AuthzJwtStrategy,
     {
       provide: LOGIN_REPOSITORY,

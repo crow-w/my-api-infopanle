@@ -15,9 +15,14 @@ import { DbClientService } from 'src/infrastructure';
 export class InfoRepositoryService implements InfoRepository {
   constructor(private readonly _dbClient: DbClientService) {}
 
-  async findAllUnlogin(): Promise<InfoResult[]> {
+  async findAllUnlogin(
+    page: number,
+    limit: number,
+    category?: number,
+  ): Promise<InfoResult[]> {
     console.log('here!');
-    const baseQuery = [
+    const offset = (page - 1) * limit;
+    let baseQuery = [
       'SELECT',
       ' inf.*',
       ' , usr.username',
@@ -30,8 +35,16 @@ export class InfoRepositoryService implements InfoRepository {
       '   inf.uId = usr.id',
       'WHERE',
       '    inf.status > 1',
-      'ORDER BY',
-      '    inf.create_time desc',
+    ].join('\n');
+    if (category) {
+      baseQuery += [` AND inf.category = ${category}`].join('\n');
+    }
+    baseQuery += [
+      `
+      ORDER BY
+          inf.create_time desc
+      LIMIT ${limit} OFFSET ${offset}
+    `,
     ].join('\n');
     const res = await this._dbClient.namedSelect(baseQuery).catch((err) => {
       throw new InternalServerErrorException(err);
@@ -126,7 +139,7 @@ export class InfoRepositoryService implements InfoRepository {
   ): Promise<InfoResultEntity> {
     const id = UuidService.getUuid();
     await getManager().transaction(async (transactionalEntityManager) => {
-      const infoObj = { id: id, uId: uuid };
+      const infoObj = { id: id, status: 1, uId: uuid };
       await transactionalEntityManager
         .insert(Info, Object.assign(req, infoObj))
         .catch((err) => {
