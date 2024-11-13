@@ -1,29 +1,54 @@
-import {
-  Controller,
-  Post,
-  UseInterceptors,
-  UploadedFile,
-  Res,
-  Req,
-} from '@nestjs/common';
-import { UploadService } from './upload.service';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { Controller, Post, Req } from '@nestjs/common';
+import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { FastifyRequest } from 'fastify';
+import * as fs from 'fs';
+import * as path from 'path';
+import { pipeline } from 'stream';
 import { UpdateUploadDto } from './dto/update-upload.dto';
-import { ApiConsumes, ApiBody, ApiTags } from '@nestjs/swagger';
+@ApiTags('upload')
 @Controller('upload')
 export class UploadController {
-  constructor(private readonly uploadService: UploadService) {}
-  //跳过身份校验
   @Post()
-  @ApiTags('upload')
+  @ApiOperation({ summary: 'Upload a file' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
-    description: 'Upload file',
+    description: 'File upload',
     type: UpdateUploadDto,
   })
-  async uploadFile(@Req() req: FastifyRequest, @Res() res) {
-    console.log('file', req);
-    res.sendResponse('上传成功', true, '上传成功');
+  async uploadFile(@Req() request: FastifyRequest) {
+    const uploadDir = path.join(__dirname, '../../../', 'uploads');
+    console.log('dir', uploadDir);
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir);
+    }
+
+    const parts = request.parts();
+    const savedFiles = [];
+
+    for await (const part of parts) {
+      if (part.file) {
+        const filename = `${Date.now()}-${part.filename}`;
+        const filepath = path.join(uploadDir, filename);
+
+        // 手动封装 `pipeline` 为 Promise
+        await new Promise((resolve, reject) => {
+          pipeline(part.file, fs.createWriteStream(filepath), (err) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(null);
+            }
+          });
+        });
+
+        const fileUrl = `/uploads/${filename}`;
+        savedFiles.push({ filename: part.filename, url: fileUrl });
+      }
+    }
+
+    return {
+      message: 'Files uploaded successfully',
+      files: savedFiles,
+    };
   }
 }

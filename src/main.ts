@@ -8,17 +8,24 @@ import { HttpExceptionsFilter } from './infrastructure/middleware/filter';
 import { LoggingInterceptor } from './infrastructure/middleware/interceptor';
 import { validationPipe } from './infrastructure/middleware/pipe';
 import { MainModule } from './main.module';
-import fastifyMultipart from 'fastify-multipart';
+import multipart from '@fastify/multipart';
+import fastifyStatic from '@fastify/static';
+import * as path from 'path';
+import { join } from 'path';
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     MainModule,
     new FastifyAdapter(),
   );
-
   app.useGlobalInterceptors(new LoggingInterceptor());
   app.useGlobalPipes(validationPipe);
   app.useGlobalFilters(new HttpExceptionsFilter(app.get(HttpAdapterHost)));
-
+  app.register(multipart);
+  app.useStaticAssets({
+    root: join(__dirname, '../dist/', 'uploads'),
+    prefix: '/uploads/',
+  });
+  console.log('path', path.join(__dirname, '../dist/', 'uploads'));
   app.enableCors({
     origin: '*',
     allowedHeaders: [
@@ -31,12 +38,6 @@ async function bootstrap() {
   });
   app.setGlobalPrefix('v1');
 
-  app.register(fastifyMultipart);
-  // // 配置静态文件服务
-  // app.register(fastifyStatic, {
-  //   root: join(__dirname, '..', 'uploads'),
-  //   prefix: '/uploads/', // 访问静态文件的 URL 前缀
-  // });
   const port = Number(process.env.LISTEN_PORT) || 3000;
   const apiHost = process.env.Host || `localhost:${port}`;
   const config = new DocumentBuilder()
