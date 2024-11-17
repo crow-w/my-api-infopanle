@@ -13,7 +13,7 @@ export class BannerService {
     private readonly _bannerRepository: BannerRepository,
   ) {}
 
-  async findAll(): Promise<BannerEntities> {
+  async findAll(): Promise<any> {
     const res = await this._bannerRepository.findAll().catch((err) => {
       throw err;
     });
@@ -28,9 +28,16 @@ export class BannerService {
           updateTime: data.updateTime,
         }),
     );
-
+    console.log('bannerList', bannerList);
     return {
-      bannerList: bannerList,
+      code: '0000',
+      data: {
+        current: 1,
+        records: bannerList,
+        size: 10,
+        total: bannerList.length,
+      },
+      msg: 'success!!!',
     };
   }
 

@@ -17,6 +17,7 @@ export class BannerRepositoryService implements BannerRepository {
     const res = await this._dbClient.namedSelect(baseQuery).catch((err) => {
       throw new InternalServerErrorException(err);
     });
+    console.log('bannerres', res);
     return res.data.map(
       (banner) =>
         new BannerEntity({
@@ -24,8 +25,8 @@ export class BannerRepositoryService implements BannerRepository {
           url: banner.url,
           sort: banner.sort,
           status: banner.status,
-          createTime: banner.createTime,
-          updateTime: banner.updateTime,
+          createTime: banner.create_time,
+          updateTime: banner.update_time,
         }),
     );
   }

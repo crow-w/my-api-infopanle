@@ -1,14 +1,26 @@
-import { Controller, Post, Req } from '@nestjs/common';
-import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Controller, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { FastifyRequest } from 'fastify';
 import * as fs from 'fs';
 import * as path from 'path';
 import { pipeline } from 'stream';
 import { UpdateUploadDto } from './dto/update-upload.dto';
+import { JwtAuthGuard } from '../auth/guards';
+import { UploadService } from './upload.service';
 @ApiTags('upload')
 @Controller('upload')
 export class UploadController {
+  constructor(private readonly _infoService: UploadService) {}
+  //
   @Post()
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Upload a file' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -17,7 +29,6 @@ export class UploadController {
   })
   async uploadFile(@Req() request: FastifyRequest) {
     const uploadDir = path.join(__dirname, '../../../', 'uploads');
-    console.log('dir', uploadDir);
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir);
     }

@@ -51,8 +51,8 @@ export class BannerController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Get()
-  @GetApiResponse<BannerEntities>(BannerEntities, '获取所有Banner')
-  async findAll(): Promise<BannerEntities> {
+  @GetApiResponse<any>(BannerEntities, '获取所有Banner')
+  async findAll(): Promise<any> {
     return await this._bannerService.findAll().catch((err) => {
       throw err;
     });
